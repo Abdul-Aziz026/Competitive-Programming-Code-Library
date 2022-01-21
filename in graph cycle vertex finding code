@@ -47,7 +47,7 @@ signed main() {
         g[a].push_back(b) ;
         g[b].push_back(a) ;
     }
-    find_cycle_vertex(1, -1) ;
+    for_find_cycle_vertex(1, -1) ;
     for (auto ii: s) {
         incyclee(ii, -1);
     }
