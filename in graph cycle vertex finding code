@@ -1,0 +1,71 @@
+/*Bismillahir Rahmanir Rahim....*/
+#include <bits/stdc++.h>
+using namespace std;
+
+#define int long long 
+const int N = 2e5+1;
+vector <int> g[N], incycle(N), color(N) ;
+set <int> s;
+
+void find_cycle_vertex(int u, int par) {
+    if (incycle[u]) {
+        s.insert(u) ;
+        return;
+    }
+    incycle[u] = 1;
+    for (auto to: g[u]) {
+        if (to == par) continue;
+        find_cycle_vertex(to, u);
+    }
+    return;
+}
+
+int incyclee(int u, int par) {
+    if (color[u]) {
+
+        return color[u] = 2;
+    }
+    color[u] = 1;
+    for (auto to: g[u]) {
+        if (to == par) continue;
+        int x = incyclee(to, u) ;
+        if (x == 2) { // thats meaning this vertex in cycle...
+            color[u] = 2;
+        }
+    }
+
+    return color[u];
+}
+
+signed main() {
+    ios_base::sync_with_stdio(0);
+    cin.tie(0); 
+
+    int n, m; cin >> n >> m;
+    for (int i=1;i<=m;++i) {
+        int a, b; cin >> a >> b;
+        g[a].push_back(b) ;
+        g[b].push_back(a) ;
+    }
+    find_cycle_vertex(1, -1) ;
+    for (auto ii: s) {
+        incyclee(ii, -1);
+    }
+    for (int i=1;i<=n;++i) {
+        if(color[i]==2) cout << i << " " ;
+    } cout << endl;
+    return 0;
+}
+/*
+6 7
+1 2
+2 3
+3 4
+2 4
+2 5
+5 6
+4 6
+
+
+
+*/
