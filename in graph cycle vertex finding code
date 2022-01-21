@@ -51,6 +51,7 @@ signed main() {
     for (auto ii: s) {
         incyclee(ii, -1);
     }
+    // this is in cycle vertex...
     for (int i=1;i<=n;++i) {
         if(color[i]==2) cout << i << " " ;
     } cout << endl;
