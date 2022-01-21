@@ -7,7 +7,7 @@ const int N = 2e5+1;
 vector <int> g[N], incycle(N), color(N) ;
 set <int> s;
 
-void find_cycle_vertex(int u, int par) {
+void for_find_cycle_vertex(int u, int par) {
     if (incycle[u]) {
         s.insert(u) ;
         return;
@@ -15,7 +15,7 @@ void find_cycle_vertex(int u, int par) {
     incycle[u] = 1;
     for (auto to: g[u]) {
         if (to == par) continue;
-        find_cycle_vertex(to, u);
+        for_find_cycle_vertex(to, u);
     }
     return;
 }
