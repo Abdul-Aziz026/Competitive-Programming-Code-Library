@@ -1,0 +1,81 @@
+/*Bismillahir Rahmanir Rahim....*/
+// kruskal algorithm...
+#include <bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define ff first
+#define ss second
+#define piii pair<int, pair<int, int>>
+
+
+struct dsu { 
+    vector<int> par, siz ; 
+
+    dsu(int n) : par(n, -1), siz(n, 1) { } 
+
+    int root(int x) { 
+        if (par[x] == -1) return x; 
+        else return par[x] = root(par[x]); 
+    } 
+
+    bool issame(int x, int y) { 
+        return root(x) == root(y); 
+    } 
+
+    void add(int x, int y) { 
+        x = root(x); y = root(y); 
+        if (x == y) return ; 
+        if (siz[x] < siz[y]) swap(x, y); 
+        par[y] = x; 
+        siz[x] += siz[y]; 
+    } 
+
+    int size(int x) { 
+        return siz[root(x)]; 
+    } 
+}; 
+
+
+
+signed main() {
+    ios_base::sync_with_stdio(0);
+    cin.tie(0); 
+
+    int n, m; cin >> n >> m ; 
+    vector <piii> g(m) ;
+    for (int i=0;i<m;++i) {
+        cin >> g[i].ss.ff >> g[i].ss.ss >> g[i].ff;
+    }
+    // auto cmp=[&](piii &a, piii &b) {
+    //     return a.ff < b.ff ;
+    // };
+    sort(g.begin(), g.end());
+    
+    dsu a(n+1) ;
+    int ans = 0;
+    for (int i=0;i<m;++i) {
+        int u = g[i].ss.ff ;
+        int v = g[i].ss.ss ;
+        int cost = g[i].ff ;
+        int p1 = a.root(u) ;
+        int p2 = a.root(v) ;
+        if (p1 == p2) continue;
+        ans += cost;
+        a.add(p1, p2) ;
+        cout << ans << endl;
+    }
+    cout << ans << endl;
+    return 0;
+}
+/*
+4 6
+1 2 3
+1 3 4
+1 4 2
+2 3 1
+2 4 8
+3 4 100
+
+answer = 6
+*/
