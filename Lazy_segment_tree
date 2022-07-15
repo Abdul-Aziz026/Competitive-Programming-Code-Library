@@ -1,0 +1,59 @@
+
+struct Lazy_Segtree {
+    int N ;
+    vector <int> tree, lazy ;
+    Lazy_Segtree(int n) {
+        N = 1;
+        while (N < n) N *= 2;
+        tree.resize(N*2, 0) ;
+        lazy.resize(N*2, 0) ;
+    }
+    void propagate(int node, int l, int r) {
+        if (!lazy[node]) return;
+        tree[node] += lazy[node];
+        if (l != r) {
+            // update to the problem requirement...
+            lazy[node<<1] += lazy[node] ;
+            lazy[node<<1|1] += lazy[node] ;
+        }
+        lazy[node] = 0 ;
+    }
+
+    void bulid(int at, int l, int r) {
+        if (l == r) {
+            tree[at] = 0;
+            lazy[at] = 0;
+            return;
+        }
+        int m = (l+r)>>1;
+        bulid(at<<1, l, m) ;
+        bulid(at<<1, m+1, r) ;
+        tree[at] = lazy[at] = 0;
+    }
+
+    // b to e update range...
+    void updat(int at, int l, int r, int b, int e, int val) {
+        propagate(at, l, r) ;
+        if (b>r or e<l) return ;
+        if (l>=b && r<=e) {
+            lazy[at] += val ;
+            propagate(at, l, r) ;
+            return ;
+        }
+        int m = (l+r)/2 ;
+        updat(at<<1, l, m, b, e, val) ;
+        updat(at<<1|1, m+1, r, b, e, val) ;
+        tree[at] = 0 ; // update to the problem requirement...
+    }
+
+    // b to e query range...
+    int query(int n,int l,int r, int b, int e){
+        propagate(n , l, r);
+        if(b > r || e < l) return 1;
+        if(l>=b && r<=e) return tree[n];
+        int mid = (l + r) / 2;
+        int x = query(2 * n , l , mid, b, e) ;
+        int y = query(2 * n + 1, mid + 1, r, b, e) ;
+        return 0;//return to the problem requirement
+    }
+};
