@@ -1,0 +1,39 @@
+
+const int M = 2e5+5;
+vector <int> g[M], depth(M) ;
+vector <vector<int>> Lca ;
+int Log=20; // redefine Log value
+
+void dfs(int u, int par) {
+    for (auto ii: g[u]) {
+        if (ii != par) {
+            depth[ii] = depth[u]+1 ;
+            Lca[0][ii] = u;
+            // binary lefting...
+            for (int i=1;i<=Log;++i) {
+                Lca[i][ii] = Lca[i-1][Lca[i-1][ii]] ;
+            }
+            dfs(ii, u) ;
+        }
+    }
+}
+
+int find_Lca(int a, int b) {
+    if (depth[a] < depth[b]) {
+        swap(a, b) ;
+    }
+    int dif = depth[a] - depth[b] ;
+    for (int i=0;i<=Log;++i) {
+        if (dif>>i&1) {
+            a = Lca[i][a] ;
+        }
+    }
+    if (a == b) return a;
+    for (int i=Log;i>=0;i--) {
+        if (Lca[i][a] != Lca[i][b]) {
+            a = Lca[i][a] ;
+            b = Lca[i][b] ;
+        }
+    }
+    return Lca[0][a] ;
+}
