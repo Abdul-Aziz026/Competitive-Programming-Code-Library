@@ -1,0 +1,41 @@
+
+#include <bits/stdc++.h>
+using namespace std;
+
+#define int long long 
+const int N = 2005 ; 
+
+int n, m, a[N], b[N], c[N], dis[N] ; 
+
+signed main() {
+    ios_base::sync_with_stdio(0);
+    cin.tie(0); 
+
+    cin >> n >> m ; 
+    for (int i=1;i<=m;++i) {
+        cin >> a[i] >> b[i] >> c[i] ; 
+        dis[i] = 1e9 ; 
+    }
+    dis[1] = 0 ; 
+    bool ok = false ; 
+    for (int i=1;i<=n;++i) {
+        bool cur = false ; 
+        for (int j=1;j<=m;++j) {
+            int u = a[j], v = b[j], cost = c[j] ; 
+            if (dis[u] + cost < dis[v]) {
+                dis[v] = dis[u] + cost ; 
+                cur = true ; 
+            }
+        }
+        if (!cur) break ; 
+        if (i == n && cur) ok = true ; 
+    }
+
+       if (ok) {
+           cout << "negative cycle found" << endl ; 
+       }
+       else cout << cost[n] << endl ; 
+
+    return 0;
+}
+
