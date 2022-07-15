@@ -1,0 +1,40 @@
+
+struct Fenwick2d {
+    vector <vi> a;
+    int r, c ;
+    Fenwick2d(int n, int m) {
+        r = n, c = m;
+        a.resize(r+1, vi(c+1)) ;
+    }
+    void update(int x, int y, int val) {
+        while (x <= r) {
+            int j = y;
+            while (j <= c) {
+                a[x][j] += val ;
+                j += (j & -j) ;
+            }
+            x += (x & -x) ;
+        }
+    }
+    
+    int  query(int x, int y) {
+        int sum = 0;
+        while (x > 0) {
+            int j = y;
+            while (j > 0) {
+                sum += a[x][j] ;
+                j -= (j & -j) ;
+            }
+            x -= (x & -x) ;
+        }
+        return sum ;
+    }
+    int cal(int x1, int y1, int x2, int y2) {
+        if(y1 > y2) return 0;
+        int in1 = query(x2, y2) ;
+        int ex1 = query(x2, y1-1) ;
+        int ex2 = query(x1-1, y2) ;
+        int in2 = query(x1-1, y1-1) ;
+        return  (in1-ex1-ex2+in2) ;
+    }
+};
