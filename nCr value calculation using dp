@@ -1,0 +1,13 @@
+int dp[1005][1005] ; 
+
+int NCR(int n, int r) {
+    dp[0][0] = 1 ; 
+    int n = 1000 ; 
+    for (int i=1;i<=n;++i) {
+        for (int j=0;j<=n;++j) {
+            if (j > i) dp[i][j] = 0 ; 
+            else if (j==i or j==0) dp[i][j] = 1 ; 
+            else dp[i][j] = dp[i-1][j-1] + dp[i-1][j] ; 
+        }
+    }
+}
