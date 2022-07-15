@@ -1,0 +1,23 @@
+
+/*------------------------------------
+.......Bismillahir Rahmanir Rahim.....
+..........created by Abdul__Aziz......
+------------------------------------*/
+#include <bits/stdc++.h> 
+using namespace std; 
+
+class class_name { 
+public: 
+    return_type method_name() { 
+        
+        return 0 ; 
+    } 
+}; 
+ 
+
+signed main() { 
+    class_name ob ; 
+    ob.method_name() ; 
+    return 0 ; 
+}
+
