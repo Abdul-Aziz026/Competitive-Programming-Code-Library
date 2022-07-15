@@ -1,0 +1,62 @@
+
+#include <bits/stdc++.h>
+using namespace std;
+
+#define int long long 
+#define pii pair<int, int>
+#define ff first
+#define ss second
+#define vi vector <int> 
+
+const int inf = 1e18 ; 
+
+vector <vector <pii> > g ; 
+int n, m ; 
+
+void dijkastra(int source, vi &dis, vi &par) {
+    dis.assign(n+1, inf) ; 
+    par.assign(n+1, -1) ; 
+    priority_queue <pii, vector <pii>, greater<pii>> pq ; 
+    dis[source] = 0 ; 
+    pq.push({0, source}) ; 
+    while (!pq.empty()) {
+        int u = pq.top().ss ; 
+        int cost = pq.top().ff ; 
+        pq.pop() ; 
+        if (dis[u] != cost) continue ; 
+        for (auto &it: g[u]) {
+            if (dis[u]+it.ss < dis[it.ff]) {
+                dis[it.ff] = dis[u] + it.ss ; 
+                pq.push({dis[it.ff], it.ff}) ; 
+                par[it.ff] = u ; 
+            }
+        }
+    }
+}
+
+signed main() {
+    ios_base::sync_with_stdio(0);
+    cin.tie(0); 
+    cin >> n >> m ; 
+    g.resize(n+1) ; 
+    for (int i = 1;i <= m; ++i) {
+        int a, b, cost ; 
+        cin >> a >> b >> cost ; 
+        g[a].push_back({b, cost}) ;
+        g[b].push_back({a, cost}) ;
+    }
+    vector <int> dis, par ; 
+    dijkastra(1, dis, par) ; 
+
+    if (dis[n] == inf) return puts("-1"), 0 ; 
+    vi path ; 
+    for (int i=n;i != 1;) {
+        path.push_back(i) ; 
+        i = par[i] ; 
+    } path.push_back(1) ; 
+    reverse(path.begin(), path.end()) ; 
+    for (int i: path) cout << i << " " ; 
+    cout << "\n" ; 
+    
+    return 0 ; 
+}
