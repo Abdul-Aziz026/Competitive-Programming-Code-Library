@@ -1,0 +1,24 @@
+
+/*---Bismillahir Rahmanir Rahim.----*/
+#include <ext/pb_ds/assoc_container.hpp> 
+#include <ext/pb_ds/tree_policy.hpp> 
+#include <bits/stdc++.h> 
+#define   ordered_set  tree<int,null_type,less<int>,rb_tree_tag,tree_order_statistics_node_update> 
+using namespace std; 
+using namespace __gnu_pbds; 
+
+
+ordered_set  st ; 
+
+
+signed main() 
+{ 
+    
+    return 0;
+}
+/*
+s.order_of_key(value);// return value index
+*s.find_by_order(index);//return index value 
+
+*/
+
