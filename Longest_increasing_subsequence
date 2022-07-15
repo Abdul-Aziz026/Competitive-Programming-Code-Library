@@ -1,0 +1,24 @@
+
+void lis(){
+    int  n, inf = 1000000007 ; 
+    cin>>n; 
+    vi  L(n+1), a(n+1) ; 
+    int  lis = 0 ; 
+    L[0] = -inf ; 
+    for (int i=1;i<=n;i++){
+        cin >> a[i] ; 
+        L[i] = inf ; 
+    } 
+    for (int i=1;i<=n;i++) { 
+        int  l = 0, r = lis ; 
+        while (l <= r){ 
+            int  mid = ( l + r ) >> 1 ; 
+            if (L[mid] < a[i]) l = mid + 1 ; 
+            else r = mid - 1 ; 
+        } 
+        L[l] = a[i] ; 
+        if (l > lis) lis = l ; 
+    }
+    cout << (lis) << '\n' ; 
+}
+
