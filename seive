@@ -1,0 +1,17 @@
+
+const int M = 1e6+5 ;
+vector <int> pr, prime(M) ;
+void seive() {
+    int n = 1e6 ;
+    prime[0] = prime[1] = true;
+    for (int i = 4 ;i <= n;i += 2) prime[i] = true;
+    pr.push_back(2) ;
+    for (int i = 3 ; i <= n ;i += 2) {
+        if (prime[i] == false) {
+            pr.push_back(i) ;
+            for (int j = i * i ;j <= n ; j += i*2) {
+                prime[j] = true;
+            }
+        }
+    }
+}
