@@ -1,0 +1,82 @@
+
+const int N = 3e5+5;
+int cnt[N], frequ[N];
+int mxfrequ ;
+
+int block;
+struct Data
+{
+    int l, r, idx ;
+    bool operator<(const Data& a) const
+    {
+        if(l/block != a.l/block) return l/block < a.l/block;
+        return r < a.r;
+    }
+};
+
+void add(int &x)
+{
+    cnt[frequ[x]]--;
+    frequ[x]++;
+    if(mxfrequ < frequ[x]) mxfrequ = frequ[x];
+    cnt[frequ[x]]++;
+}
+
+void sub(int &x)
+{
+    cnt[frequ[x]]--;
+    if(mxfrequ==frequ[x] && cnt[frequ[x]]==0) mxfrequ--;
+    frequ[x]--;
+    cnt[frequ[x]]++;
+}
+
+void MOE_S()
+{
+    int n, q ;
+    cin >> n >> q ;
+    vector <int> a(n+1) ;
+    vector<int> ans(q);
+
+    for(int i=1; i<=n; i++) cin >> a[i];
+    block = sqrt(n);
+    vector <Data> Q(q);
+    for(int i=0; i<q; i++)
+    {
+        cin >> Q[i].l >> Q[i].r;
+        Q[i].idx = i;
+    }
+    sort(Q.begin(), Q.end());
+    int left = 1,right = 0;
+    for(int i=0; i<q; i++)
+    {
+        int L = Q[i].l, R = Q[i].r;
+        //add...
+        while(right < R)
+        {
+            right++;
+            add(a[right]);
+        }
+        //add..
+        while(left > L)
+        {
+            left--;
+            add(a[left]);
+        }
+        //sub...
+        while( right > R)
+        {
+            sub(a[right]);
+            right--;
+        }
+        //sub...
+        while(left < L)
+        {
+            sub(a[left]);
+            left++;
+        }
+        ans[Q[i].idx] = 0;// output setting logic..
+    }
+    for(int i=0; i<q; i++) {
+        cout << ans[i] <<"\n";
+    }
+}
