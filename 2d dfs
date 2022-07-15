@@ -1,0 +1,20 @@
+
+ // 2d dfs...
+int n, m ; 
+string s[1000] ; 
+bool vis[1000][1000] ; 
+
+int dx[] = {1, -1, 0, 0} ; 
+int dy[] = {0, 0, 1, -1} ; 
+
+void dfs(int i, int j) {
+	if (vis[i][j]) return ; 
+	vis[i][j] = 1 ; 
+	for (int c=0;c<4;++c) {
+		int x = i + dx[c] ; 
+		int y = j + dy[c] ; 
+		if (x >= 0 and x < n and y >= 0 and y < m and s[x][y] != '#') {
+			dfs(x, y) ; 
+		}
+	}
+}
