@@ -1,0 +1,24 @@
+
+struct Bit {
+    int n; 
+    vector <int> s;
+    Bit(int x) {
+        n = x;
+        s.resize(n+1, 0);
+    }
+    void update(int idx, int val) {
+        while (idx <= n) {
+            s[idx] += val ;
+            idx += idx&-idx;
+        }
+    }
+    int query(int idx) {
+        int sum=0;
+        while (idx > 0) {
+            sum += s[idx];
+            idx -= idx&-idx;
+        }
+        return sum;
+    }
+};
+
