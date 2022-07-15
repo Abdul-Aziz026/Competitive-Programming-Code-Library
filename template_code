@@ -1,0 +1,46 @@
+/*...Bismillahir Rahmanir Rahim...*/
+#include <bits/stdc++.h>
+using namespace std;
+
+//debug..........
+#ifndef ONLINE_JUDGE
+#include "debug.cpp"
+#else
+#define dbg(x...)
+#endif
+
+#define   int  long long
+#define   ll  long long
+#define   ld   long double
+#define   pb   push_back
+#define   vi   vector<int>
+#define   bitcount(x)  (int)__builtin_popcount(x)
+#define   Lsb(x)  (int)__builtin_ctzll(x)
+#define   fast  ios_base::sync_with_stdio(0),cin.tie(0),cout.tie(0)
+#define   sz(x)  (int)x.size()
+#define   all(a) (a).begin(),(a).end()
+#define   Yes  cout << "YES\n"
+#define   No  cout << "NO\n"
+#define   ff   first
+#define   ss   second
+#define   endl  "\n"
+#define   pi   acos(-1.0)
+#define   pii  pair<int,int>
+#define   lcm(a,b) (a/__gcd(a, b)*b)
+
+const int  mod = 998244353 ;
+const int N = 200005 ;
+const int inf = 2000000005;
+
+inline void solve() {
+    int n ; cin >> n ;
+    
+}
+
+signed main()
+{
+    fast ;
+    int t = 1 ;  cin >> t ;
+    while (t--) solve() ;
+    return 0 ;
+}
