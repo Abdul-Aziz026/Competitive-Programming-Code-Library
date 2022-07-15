@@ -1,0 +1,50 @@
+
+const int N = 200001;
+int a[N];
+
+struct Segtree {
+    int n;
+    vector </*..data..*/> tree;
+    Segtree(int x) {
+        n = x ;
+        tree.resize(n*3, 0) ;
+    }
+
+    void build(int node, int l, int r) {
+        if (l == r) {
+            // tree[node] = a[l] ;
+            return ;
+        }
+        int m = (l+r)>>1 ;
+        build(node*2, l, m);
+        build(node*2+1, m+1, r);
+        // tree[node] = update what is asking in this problem
+    }
+
+    void update(int at, int l, int r, int idx, int val) {
+        if (idx > r or idx < l) return ;
+        if (idx >= r && idx <= l) {
+
+            // tree[at].val = val ;
+            // tree[at].id = l ;
+            return ;
+        }
+        int m = (l+r)>>1 ;
+        update(at*2, l, m, idx, val) ;
+        update(at*2+1, m+1, r, idx, val) ;
+        // tree[at] = ...update to the tree requirment...
+    }
+
+    int query(int at, int l, int r, int b, int e) {
+        if (l >= b && r <= e) return tree[at];
+        if (b > r or e < l) return 0;
+        int m = (l+r)>>1 ;
+        int val1 = query(at*2, l, m, b, e) ;
+        int val2 = query(at*2+1, m+1, r, b, e) ;
+        // int x = operation on requirment...
+        // return x;
+        return 0;
+    }
+};
+
+
