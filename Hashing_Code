@@ -1,0 +1,42 @@
+
+#define int long long
+// code outside precal power function code if you get TLE verdict…
+struct Hashing {
+    const int M[2] = {998244353, 1000000007} ;
+    const int B[2] = {27, 29} ;
+    int n ;
+    vector <int> pre[2];
+    vector <int> p[2];
+    Hashing(int x) {
+        n = x+1 ;
+        for (int i=0;i<2;++i) pre[i].resize(n+1) ;
+        for (int i=0;i<2;++i) p[i].resize(n+1) ;
+    }
+    void build(string s) {
+        for (int j=0;j<2;++j) p[j][0] = 1;
+        for (int i=1;i<=n;++i) {
+            for (int j=0;j<2;++j) {
+                p[j][i] = (p[j][i-1] * B[j]) % M[j] ;
+            }
+        }
+        int n = (int)(s.size()) ;
+        s = "#" + s ;
+        for (int i=1;i<=n;++i) {
+            for (int j=0;j<2;++j) {
+                pre[j][i] = ((pre[j][i-1] * B[j]) + (s[i]-'a'+1)) % M[j] ;
+            }
+        }
+    }
+    vector <int> query(int l, int r) {
+        vector <int> ans(2);
+        for (int j=0;j<2;++j) {
+            ans[j] = pre[j][r] ;
+        }
+        int len = r-l+1 ;
+        for (int j=0;j<2;++j) {
+            ans[j] -= (pre[j][l-1] * p[j][len]) % M[j] ;
+            if (ans[j] < 0) ans[j] += M[j] ;
+        }
+        return ans;
+    }
+};
