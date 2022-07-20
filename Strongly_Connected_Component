@@ -1,0 +1,114 @@
+/*...Bismillahir Rahmanir Rahim...*/
+#include <bits/stdc++.h>
+using namespace std;
+
+//debug..........
+#ifndef ONLINE_JUDGE
+#include "debug.cpp"
+#else
+#define dbg(x...)
+#endif
+
+#define   int  long long
+#define   ll  long long
+#define   ld   long double
+#define   pb   push_back
+#define   vi   vector<int>
+#define   bitcount(x)  (int)__builtin_popcount(x)
+#define   Lsb(x)  (int)__builtin_ctzll(x)
+#define   fast  ios_base::sync_with_stdio(0),cin.tie(0),cout.tie(0)
+#define   sz(x)  (int)x.size()
+#define   all(a) (a).begin(),(a).end()
+#define   Yes  cout << "YES\n"
+#define   No  cout << "NO\n"
+#define   ff   first
+#define   ss   second
+#define   endl  "\n"
+#define   pi   acos(-1.0)
+#define   pii  pair<int,int>
+#define   lcm(a,b) (a/__gcd(a, b)*b)
+
+const int  mod = 998244353 ;
+const int N = 400002 ;
+const int inf = 2000000005;
+
+vi g[N], rev[N], ar, vis(N), vis1(N) ;
+
+void dfs(int u) {
+    vis[u] = 1;
+    for (auto ii: g[u]) {
+        if (!vis[ii]) dfs(ii) ;
+    }
+    ar.push_back(u) ;
+}
+
+vector <int> cur_connect;
+int cycle ;
+
+void dfs1(int u) {
+    cur_connect.push_back(u) ;
+    vis1[u] = 1;
+    for (auto ii: rev[u]) {
+        if (!vis1[ii]) dfs1(ii) ;
+        else if (vis1[ii] == 1) cycle = true;
+    }
+    vis1[u] = 2;
+}
+
+inline void solve() {
+    int n, m ; cin >> n >> m ;
+    for (int i=1;i<=n;++i) {
+        g[i].clear() ;
+        rev[i].clear() ;
+        vis[i] = vis1[i] = 0;
+    }
+    for (int i=0;i<m;++i) {
+        int x, y; cin >> x >> y ;
+        g[x].push_back(y) ;
+    }
+    ar.clear() ;
+    dfs(1) ;
+    reverse(all(ar)) ;
+    for (auto u: ar) {
+        for (auto v: g[u]) {
+            rev[v].push_back(u) ;
+        }
+    }
+    vector <vi> sccs ;
+    vector <int> has(n+1, 0);
+    int group = 0 ;
+    for (auto ii: ar) {
+        if (!vis1[ii]) {
+            cycle = false ;
+            cur_connect.clear() ;
+            dfs1(ii) ;
+            has[group] = cycle ;
+            sccs.push_back(cur_connect) ;
+            ++group ;
+        }
+    }
+    vector <int> ans(n+1, 0) ;
+    ans[1] = 1;
+    for (int i=0;i<group;++i) {
+        vector <int> a = sccs[i] ;
+        for (auto u: a) {
+            if (has[i]) ans[u] = -1;
+            for (auto v: g[u]) {
+                if (ans[u]==-1 or ans[v]==-1) ans[v] = -1;
+                else ans[v] = min(ans[v]+ans[u], 2LL) ;
+            }
+        }
+    }
+    for (int i=1;i<=n;++i) {
+        cout << ans[i] << " " ;
+    }
+    cout << endl;
+}
+
+signed main()
+{
+    fast ;
+    int t = 1 ;  cin >> t ;
+    while (t--) solve() ;
+    return 0 ;
+}
