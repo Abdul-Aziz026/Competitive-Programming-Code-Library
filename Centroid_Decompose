@@ -1,0 +1,136 @@
+/*Bismillahir Rahmanir Rahim....*/
+#include <bits/stdc++.h>
+using namespace std;
+
+//debug..........
+#ifdef Azizul
+#include "debug.cpp"
+#else
+#define dbg(x...)
+#endif
+
+#define   bitcount(x)  (int)__builtin_popcount(x)
+#define int long long
+
+const int N = 2e5+5;
+int n, siz[N], deleted[N], sub, bit[N], cnt[1<<20], ans[N] ;
+vector <int> g[N];
+string s;
+
+void subtree_size(int u, int par) {
+    ++sub ;
+    siz[u] = 1;
+    for (auto v: g[u]) {
+        if (v == par or deleted[v]) continue;
+        subtree_size(v, u);
+        siz[u] += siz[v] ;
+    }
+}
+
+int get_centroid(int u, int par) {
+    for (auto v: g[u]) {
+        if (v == par or deleted[v]) continue;
+        if (siz[v] > sub/2) return get_centroid(v, u);
+    }
+    return u;
+}
+
+void updat(int u, int par, int mask, int val) {
+    mask ^= bit[u] ;
+    cnt[mask] += val;
+    for (auto v: g[u]) {
+        if (v==par or deleted[v]) continue;
+        updat(v, u, mask, val) ;
+    }
+}
+
+int res, root_to ;
+
+int Solve(int u, int par, int mask, int root_mask) {
+    mask ^= bit[u] ;
+    root_mask ^= bit[u] ;
+    int cur = cnt[mask] ;
+    if (bitcount(root_mask)<=1) root_to += 1;
+    for (int i=0;i<20;++i) {
+        int new_ = mask ^ (1 << i) ;
+        cur += cnt[new_] ;
+    }
+    res += cur;
+    // dbg(u, cur);
+    for (auto v: g[u]) {
+        if (v == par or deleted[v]) continue ;
+        cur += Solve(v, u, mask, root_mask) ;
+    }
+    cur = cur + (bitcount(root_mask) <= 1);
+    // dbg(u, cur, bitcount(mask))
+    ans[u] += cur ;
+    return cur;
+}
+
+void decompose(int u, int pp) {
+    sub = 0 ;
+    subtree_size(u, pp) ;
+    int centroid = get_centroid(u, pp) ;
+    deleted[centroid] = 1 ;
+    updat(centroid, 0, 0, 1) ;
+    res = 0 ;
+    root_to = 1;
+    cnt[bit[centroid]] -= 1;
+    for (auto v: g[centroid]) {
+        if (v==pp or deleted[v]) continue ;
+        updat(v, centroid, bit[centroid], -1) ;
+        Solve(v, centroid, 0, bit[centroid]) ;
+        updat(v, centroid, bit[centroid], 1) ;
+    }
+    cnt[bit[centroid]] += 1;
+    ans[centroid] += res/2 + root_to;
+    // dbg(centroid, res/2, root_to) ;
+    updat(centroid, 0, 0, -1) ;
+    // dbg(centroid) ;
+    // for (int i=1;i<=n;++i) cout << ans[i] << " " ;
+    // cout << endl;
+    // for current_node_subtree_centroid_finding...
+    for (auto v: g[centroid]) {
+        if (v==pp or deleted[v]) continue;
+        decompose(v, centroid) ;
+    }
+}
+
+signed main() {
+    ios_base::sync_with_stdio(0);
+    cin.tie(0); 
+
+    cin >> n ;
+    for (int i=1;i<n;++i) {
+    	int u, v ;cin >> u >> v ;
+    	g[u].push_back(v) ;
+        g[v].push_back(u) ;
+    }
+    string s; cin >> s ;
+    for (int i=0;i<n;++i) {
+        bit[i+1] = 1LL << (s[i]-'a') ;
+    }
+    decompose(1, 0);
+    // cout << endl;
+    for (int i=1;i<=n;++i) cout << ans[i] << " " ;
+    cout << endl;
+    return 0;
+}
+/*
+5
+1 2
+2 3
+3 4
+4 5
+aaaaa
+
+7
+6 2
+4 3
+3 7
+5 2
+7 2
+1 4
+afefdfs
+
+*/
