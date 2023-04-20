@@ -17,8 +17,10 @@ struct DSU {
         x = root(x); y = root(y); 
         if (x == y) return ; 
         if (siz[x] < siz[y]) swap(x, y); 
-        par[y] = x; 
-        siz[x] += siz[y]; 
+        par[y] = x;
+        par[x]=-1;
+        siz[x] += siz[y];
+        siz[y] = 0;
     } 
 
     int size(int x) { 
