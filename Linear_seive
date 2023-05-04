@@ -1,0 +1,10 @@
+
+void linear_seive() {
+    const int N = 10000000;
+    for (int i=2;i<=N;++i) {
+        if (!vis[i]) pr.pb(i);
+        for (int j=0;j<(int)pr.size() && pr[j]*i<=N;++j) {
+            vis[i * pr[j]] = 1;
+        }
+    }
+}
