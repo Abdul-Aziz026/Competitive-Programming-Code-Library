@@ -1,0 +1,60 @@
+
+const int  mod = 1e9+7 ;
+struct matrix{
+    int m[2][2];
+    matrix() {
+        // set value by own
+        m[0][0] = 0;
+        m[0][1] = m[1][0] = m[1][1] = 1;
+    }
+    matrix(int a, int b, int c, int d) {
+        m[0][0] = a;
+        m[0][1] = b;
+        m[1][0] = c;
+        m[1][1] = d;
+    }
+    matrix operator * (matrix& b) {
+        matrix c;
+        c.m[0][0] = c.m[0][1] = c.m[1][0] = c.m[1][1] = 0;
+        for (int i=0;i<2;++i) {
+            for (int j=0;j<2;++j) {
+                for (int k=0;k<2;++k) {
+                    c.m[i][j] += m[i][k] * b.m[k][j];
+                    c.m[i][j] %= mod;
+                }
+            }
+        }
+        return c;
+    }
+    matrix operator + (matrix& b) {
+        matrix c;
+        c.m[0][0] = c.m[0][1] = c.m[1][0] = c.m[1][1] = 0;
+        for (int i=0;i<2;++i) {
+            for (int j=0;j<2;++j) {
+                c.m[i][j] = m[i][j] + b.m[i][j];
+                c.m[i][j] %= mod;
+            }
+        }
+        return c;
+    }
+    void setval(int a, int b, int c, int d) {
+        m[0][0] = a, m[0][1] = b, m[1][0] = c, m[1][1] = d;
+    }
+};
+
+matrix unit, zero;
+
+matrix bigmod(int p) { 
+    matrix ans;
+    ans.setval(1, 0, 0, 1);
+    matrix a;
+    a.setval(0, 1, 1, 1);
+    while (p > 0) {
+        if (p & 1) {
+            ans = (ans * a) ; 
+        }
+        a = (a * a) ;
+        p >>= 1 ;
+    } 
+    return ans ;
+}
