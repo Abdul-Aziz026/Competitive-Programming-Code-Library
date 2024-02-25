@@ -1,4 +1,4 @@
-```
+```cpp
 /*...Bismillahir Rahmanir Rahim...*/
 // #pragma GCC optimize ("Ofast,unroll-loops")
 // #pragma GCC target ("avx2")
