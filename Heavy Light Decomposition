@@ -1,0 +1,131 @@
+// https://cses.fi/problemset/task/2134
+/*Bismillahir Rahmanir Rahim....*/
+#include <bits/stdc++.h>
+using namespace std;
+const int N = 200002;
+
+vector <int> g[N + 1];
+int depth[N], siz[N], head[N], parent[N], heavy[N], a[N], color[N], pos[N] ;
+int idx, n, q ;
+
+struct Segtree {
+    int n;
+    vector <int> tree;
+    Segtree(int x) {
+        int n = 1 ;
+        while (n<x) n <<= 1;
+        tree.resize(n<<1, 0);
+    }
+
+    void build(int at, int l, int r) {
+        if (l == r) {
+            tree[at] = a[l] ;
+            return ;
+        }
+        int m = (l+r)>>1 ;
+        build(at<<1, l, m);
+        build(at<<1|1, m+1, r);
+        tree[at] = max(tree[at<<1], tree[at<<1|1]);
+    }
+
+    void update(int at, int l, int r, int idx, int val) {
+        if (idx > r or idx < l) return ;
+        if (idx >= r && idx <= l) {
+            tree[at] = val ;
+            return ;
+        }
+        int m = (l+r)>>1 ;
+        if (idx <= m) update(at<<1, l, m, idx, val) ;
+        else update(at<<1|1, m+1, r, idx, val) ;
+        tree[at] = max(tree[at<<1], tree[at<<1|1]);
+    }
+
+    int query(int at, int l, int r, int b, int e) {
+        if (l >= b && r <= e) return tree[at];
+        if (b > r or e < l) return 0;
+        int m = (l+r)>>1 ;
+        if (e <= m) return query(at<<1, l, m, b, e) ;
+        if (b > m) return query(at<<1|1, m+1, r, b, e) ;
+        return max(query(at<<1, l, m, b, e), query(at<<1|1, m+1, r, b, e));
+    }
+};
+
+void dfs(int u, int par) {
+    siz[u] = 1;
+    for (auto v: g[u]) {
+        if (v != par) {
+            depth[v] = depth[u] + 1;
+            parent[v] = u;
+            dfs(v, u);
+            siz[u] += siz[v];
+            if (siz[v] > siz[heavy[u]]) {
+                heavy[u] = v;
+            }
+        }
+    }
+    // cout << u << " size is " << siz[u] << endl;
+}
+
+void dfsHLD(int u, int p, int par) {
+    a[++idx] = color[u];
+    pos[u] = idx;
+    head[u] = p;
+    if (heavy[u] != 0) {
+        dfsHLD(heavy[u], p, u);
+    }
+
+    for (auto v: g[u]) {
+        if (v != par && v != heavy[u]) {
+            dfsHLD(v, v, u);
+        }
+    }
+}
+
+int Lca(int a, int b, Segtree& Q) {
+    int mx = 1;
+    while (head[a] != head[b]) {
+        if (depth[head[a]] < depth[head[b]]) swap(a, b);
+        int r = pos[a], l = pos[head[a]];
+        mx = max(mx, Q.query(1, 1, n, l, r));
+        a = parent[head[a]];
+    }
+    int l = pos[a], r = pos[b];
+    if (l > r) swap(l, r);
+    mx = max(mx, Q.query(1, 1, n, l, r));
+    return mx;
+}
+
+
+signed main() {
+    ios_base::sync_with_stdio(0);
+    cin.tie(0),cout.tie(0);
+    cin >> n >> q;
+    for (int i = 1; i <= n; ++i) {
+        cin >> color[i];
+    }
+    int x, y ;
+    for (int i = 1; i < n; ++i) {
+        cin >> x >> y ;
+        g[x].push_back(y);
+        g[y].push_back(x);
+    }
+
+    dfs(1, 1);
+    idx = 0;
+    dfsHLD(1, 1, 1);
+    Segtree Q(n);
+    Q.build(1, 1, n);
+    int t, a, b ;
+    while (q--) {
+        cin >> t >> a >> b;
+        if (t == 1) {
+            int p = pos[a];
+            Q.update(1, 1, n, p, b);
+        }
+        else {
+            cout << Lca(a, b, Q) << " ";
+        }
+    }
+    cout << endl;
+    return 0;
+}
