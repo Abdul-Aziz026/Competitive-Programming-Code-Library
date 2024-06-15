@@ -1,0 +1,104 @@
+/*Bismillahir Rahmanir Rahim....*/
+#include <bits/stdc++.h>
+using namespace std;
+
+class ListNode {
+public:
+	int val;
+	ListNode* left;
+	ListNode* right;
+	ListNode() {
+		val = 0;
+		this->left = this->right = NULL;
+	}
+	ListNode(int val) {
+		this->val = val;
+		this->left = this->right = NULL;
+	}
+};
+
+ListNode* root;
+
+void print(ListNode* root) {
+	if (root == NULL) return;
+	cout << root->val << " ";
+	print(root->left);
+	print(root->right);
+}
+
+ListNode* add(ListNode* root, int val) {
+	if (root==nullptr) {
+		return new ListNode(val);
+	}
+	if (root->val < val) root->right = add(root->right, val);
+	else root->left = add(root->left, val);
+	return root;
+}
+
+void search(ListNode* root, int x) {
+	while(root != nullptr) {
+		if (root->val == x) {
+			cout << "Found : " << x << endl;
+			return;
+		}
+		if (root->val < x) root = root->right;
+		else root = root->left;
+	}
+	cout << "Not Found" << endl;
+}
+
+int getChild(ListNode* root) {
+	while (root->right != nullptr) {
+		root = root->right;
+	}
+	return root->val;
+}
+
+ListNode* deleteNode(ListNode* root, int val) {
+	if(root->val < val) root->right = deleteNode(root->right, val);
+	else if (root->val > val) root->left = deleteNode(root->left, val);
+	else {
+		// both child are null;
+		if (root->left == nullptr and root->right == nullptr) {
+			delete root;
+			return nullptr;
+		}
+		// if left child is null
+		if (root->left == nullptr) {
+			ListNode* tmp = root->right;
+			delete root;
+			return tmp;
+		}
+		// if right child is null
+		else if (root->right == nullptr) {
+			ListNode* tmp = root->left;
+			delete root;
+			return tmp;
+		}
+		else {
+			int val = getChild(root->left);
+			root->val = val;
+			root->left = deleteNode(root->left, val);
+		}
+	}
+}
+
+signed main() {
+	ListNode* root = nullptr;
+    root = add(root, 2);
+    root = add(root, 4);
+    root = add(root, 5);
+    root = add(root, 8);
+    print(root);
+    cout << endl;
+    search(root, 5);
+    search(root, 10);
+    root = add(root, 10);
+    search(root, 10);
+    print(root);
+    cout << endl;
+    deleteNode(root, 10);
+    print(root);
+    search(root, 10);
+    return 0;
+}
